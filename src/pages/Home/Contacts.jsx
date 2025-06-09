@@ -1,5 +1,31 @@
 import { Section } from "../../components/container";
+import { useRef } from 'react';
+import emailjs from '@emailjs/browser';
 export default function Contacts() {
+const form = useRef();
+
+  const sendEmail = (e) => {
+    e.preventDefault();
+
+    emailjs.sendForm(
+      'service_jv1qayc',   
+      'template_4cp9x7v',  
+      form.current,
+      'U6ywNkUpJ-Fmj4Yqi'    
+    )
+      .then(
+        (result) => {
+          console.log('SUCCESS!', result.text);
+          alert('Message sent successfully!');
+          form.current.reset(); 
+        },
+        (error) => {
+          console.log('FAILED...', error.text);
+          alert('Failed to send message. Please try again.');
+        }
+      );
+  };
+
   return (
     <Section className="lam-bg-secondary " id="contact">
       <div className="global-max-width">
@@ -20,7 +46,7 @@ export default function Contacts() {
             </div>
           </div>
           <div className="col-md-7">
-            <form className=" poppins justify-content-center">
+            <form className=" poppins justify-content-center" ref={form} onSubmit={sendEmail}>
               <div className="row mb-3">
                 <div className="col-lg-6">
                   <label className="aa-fs-p-4">Full name</label>
